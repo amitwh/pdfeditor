@@ -18,7 +18,7 @@ An open-source, cross-platform PDF editor built with Electron that provides comp
 - **PDF Libraries**: 
   - PDF-lib (PDF manipulation)
   - PDF-merger-js (PDF merging)
-  - PDF2pic (PDF to image conversion)
+  - pdf-poppler (PDF to image conversion)
   - Node-forge (encryption/password protection)
 - **Build System**: Electron Builder
 
@@ -149,7 +149,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Built with [Electron](https://www.electronjs.org/)
 - PDF manipulation powered by [PDF-lib](https://pdf-lib.js.org/)
 - PDF merging using [PDF-merger-js](https://github.com/nbesli/pdf-merger-js)
-- PDF to image conversion with [PDF2pic](https://github.com/yakovmeister/pdf2pic)
+- PDF to image conversion with [pdf-poppler](https://github.com/Belphemur/node-pdf2pic)
 - Encryption support via [Node-forge](https://github.com/digitalbazaar/forge)
 
 ## Support

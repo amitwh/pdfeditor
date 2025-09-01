@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header class="toolbar">
+            <div class="toolbar-section">
+                <button id="open-file-btn" class="btn btn-primary">
+                    <span class="btn-icon">📁</span>
+                    Open PDF
+                </button>
+                <button id="save-file-btn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">💾</span>
+                    Save PDF
+                </button>
+            </div>
+            
+            <div class="toolbar-section">
+                <button id="merge-btn" class="btn btn-secondary">
+                    <span class="btn-icon">🔗</span>
+                    Merge
+                </button>
+                <button id="split-btn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">✂️</span>
+                    Split
+                </button>
+                <button id="convert-btn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">🔄</span>
+                    Convert
+                </button>
+                <button id="password-btn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">🔒</span>
+                    Password
+                </button>
+            </div>
+            
+            <div class="toolbar-section">
+                <button id="undo-btn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">↶</span>
+                    Undo
+                </button>
+                <button id="redo-btn" class="btn btn-secondary" disabled>
+                    <span class="btn-icon">↷</span>
+                    Redo
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div id="sidebar" class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Pages</h3>
+                    <span id="page-count">0 pages</span>
+                </div>
+                <div id="page-thumbnails" class="page-thumbnails">
+                    <div class="no-pdf-message">
+                        Open a PDF file to get started
+                    </div>
+                </div>
+            </div>
+
+            <div id="pdf-viewer" class="pdf-viewer">
+                <div id="pdf-container" class="pdf-container">
+                    <div class="welcome-message">
+                        <h2>Welcome to PDF Editor</h2>
+                        <p>Open a PDF file to start editing, or use the tools above to merge, split, convert, or add password protection to your PDFs.</p>
+                        <button id="welcome-open-btn" class="btn btn-primary btn-large">
+                            <span class="btn-icon">📁</span>
+                            Open PDF File
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="status-bar" class="status-bar">
+            <span id="status-text">Ready</span>
+            <div class="status-actions">
+                <span id="zoom-level">100%</span>
+                <button id="zoom-out" class="btn-icon-small">-</button>
+                <button id="zoom-in" class="btn-icon-small">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal dialogs -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div id="merge-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Merge PDF Files</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="file-list" id="merge-file-list">
+                    <div class="file-drop-zone">
+                        <p>Click to select PDF files or drag and drop them here</p>
+                        <button id="add-merge-files" class="btn btn-primary">Select Files</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="merge-execute" class="btn btn-primary" disabled>Merge PDFs</button>
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+            </div>
+        </div>
+
+        <div id="split-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Split PDF</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="split-options">
+                    <label>
+                        <input type="radio" name="split-type" value="pages" checked>
+                        Split by page range
+                    </label>
+                    <div class="split-page-range">
+                        <label>From page: <input type="number" id="split-from" min="1" value="1"></label>
+                        <label>To page: <input type="number" id="split-to" min="1" value="1"></label>
+                    </div>
+                    
+                    <label>
+                        <input type="radio" name="split-type" value="each">
+                        Split into individual pages
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="split-execute" class="btn btn-primary">Split PDF</button>
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+            </div>
+        </div>
+
+        <div id="convert-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Convert PDF</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="convert-options">
+                    <label>Convert to:
+                        <select id="convert-format">
+                            <option value="png">PNG Images</option>
+                            <option value="jpg">JPG Images</option>
+                            <option value="jpeg">JPEG Images</option>
+                        </select>
+                    </label>
+                    
+                    <label>Quality:
+                        <select id="convert-quality">
+                            <option value="72">72 DPI (Web)</option>
+                            <option value="150" selected>150 DPI (Print)</option>
+                            <option value="300">300 DPI (High Quality)</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="convert-execute" class="btn btn-primary">Convert PDF</button>
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+            </div>
+        </div>
+
+        <div id="password-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3>Password Protection</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="password-options">
+                    <label>
+                        <input type="radio" name="password-action" value="add" checked>
+                        Add password protection
+                    </label>
+                    <label>
+                        <input type="radio" name="password-action" value="remove">
+                        Remove password protection
+                    </label>
+                    
+                    <div class="password-inputs">
+                        <label>Password: <input type="password" id="pdf-password" placeholder="Enter password"></label>
+                        <label id="confirm-password-label">Confirm Password: <input type="password" id="confirm-password" placeholder="Confirm password"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="password-execute" class="btn btn-primary">Apply</button>
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

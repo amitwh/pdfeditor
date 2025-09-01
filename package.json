@@ -1,6 +1,6 @@
 {
   "name": "pdf-editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Open-source PDF editor with editing, merging, splitting, conversion and password protection features",
   "main": "src/main.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "pdf-lib": "^1.17.1",
     "pdf-merger-js": "^4.3.0",
     "node-forge": "^1.3.1",
-    "pdf-poppler": "^0.2.1",
+    "pdfjs-dist": "^3.11.174",
     "jimp": "^0.22.10"
   },
   "build": {
@@ -47,8 +47,18 @@
       "src/**/*",
       "assets/**/*",
       "node_modules/**/*",
-      "package.json"
+      "package.json",
+      "!node_modules/**/test/**",
+      "!node_modules/**/tests/**",
+      "!node_modules/**/*.md",
+      "!node_modules/**/*.map",
+      "!node_modules/**/.git/**"
     ],
+    "includeSubNodeModules": true,
+    "nodeGypRebuild": false,
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
+    "asar": true,
     "linux": {
       "target": [
         {

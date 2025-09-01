@@ -2,7 +2,6 @@ const fs = require('fs').promises;
 const path = require('path');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const PDFMerger = require('pdf-merger-js');
-const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js');
 const Jimp = require('jimp');
 const forge = require('node-forge');
 
@@ -104,24 +103,25 @@ class PDFService {
 
     async convertPDF(filePath, format, options = {}, outputPath) {
         try {
-            const data = new Uint8Array(await fs.readFile(filePath));
-            const pdfDoc = await pdfjsLib.getDocument(data).promise;
-            const numPages = pdfDoc.numPages;
+            // Use pdf-lib to get page count
+            const pdfBuffer = await fs.readFile(filePath);
+            const pdfDoc = await PDFDocument.load(pdfBuffer);
+            const numPages = pdfDoc.getPageCount();
+            
             const outputDir = path.dirname(outputPath);
             const baseName = path.basename(outputPath, path.extname(outputPath));
             const results = [];
             
+            // Create placeholder images for each page using Jimp
             for (let i = 1; i <= numPages; i++) {
-                const page = await pdfDoc.getPage(i);
-                const viewport = page.getViewport({ scale: (options.quality || 150) / 72 });
+                const page = pdfDoc.getPage(i - 1);
+                const { width, height } = page.getSize();
                 
-                // Create a canvas-like object for rendering
-                const width = Math.floor(viewport.width);
-                const height = Math.floor(viewport.height);
-                const image = new Jimp(width, height, 0xFFFFFFFF);
+                // Create an image with page dimensions
+                const image = new Jimp(Math.floor(width), Math.floor(height), 0xFFFFFFFF);
                 
-                // For simplicity, we'll save a placeholder image
-                // In production, you'd use a proper canvas implementation
+                // Add page number text (placeholder for actual rendering)
+                // In production, you'd use a proper PDF rendering library
                 const outputFile = path.join(outputDir, `${baseName}_page_${i}.${format}`);
                 
                 if (format === 'png') {

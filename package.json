@@ -1,6 +1,6 @@
 {
   "name": "pdf-editor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Open-source PDF editor with editing, merging, splitting, conversion and password protection features",
   "main": "src/main.js",
   "scripts": {
@@ -70,7 +70,17 @@
           "arch": ["x64", "arm64"]
         }
       ],
-      "category": "Office"
+      "category": "Office",
+      "executableName": "pdf-editor",
+      "maintainer": "Amit Haridas <amit.wh@gmail.com>"
+    },
+    "deb": {
+      "depends": [],
+      "packageCategory": "utils",
+      "priority": "optional",
+      "compression": "xz",
+      "afterInstall": "build/linux/postinst.sh",
+      "afterRemove": "build/linux/postrm.sh"
     },
     "mac": {
       "target": [

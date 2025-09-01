@@ -4,8 +4,8 @@
   "description": "Open-source PDF editor with editing, merging, splitting, conversion and password protection features",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --dev",
+    "start": "electron . --no-sandbox",
+    "dev": "electron . --dev --no-sandbox",
     "build": "electron-builder",
     "build:linux": "electron-builder --linux",
     "build:mac": "electron-builder --mac", 
@@ -32,11 +32,10 @@
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",
-    "pdf2pic": "^3.0.4",
     "pdf-merger-js": "^4.3.0",
     "node-forge": "^1.3.1",
-    "canvas": "^2.11.2",
-    "sharp": "^0.32.5"
+    "pdf-poppler": "^0.2.1",
+    "jimp": "^0.22.10"
   },
   "build": {
     "appId": "com.amitwh.pdfeditor",

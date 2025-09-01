@@ -2,7 +2,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const PDFMerger = require('pdf-merger-js');
-const pdf2pic = require('pdf2pic');
+const pdf = require('pdf-poppler');
+const Jimp = require('jimp');
 const forge = require('node-forge');
 
 class PDFService {
@@ -103,17 +104,14 @@ class PDFService {
 
     async convertPDF(filePath, format, options = {}, outputPath) {
         try {
-            const quality = options.quality || 150;
-            const convert = pdf2pic.fromPath(filePath, {
-                density: quality,
-                saveFilename: path.basename(outputPath, path.extname(outputPath)),
-                savePath: path.dirname(outputPath),
+            const opts = {
                 format: format,
-                width: options.width,
-                height: options.height
-            });
+                out_dir: path.dirname(outputPath),
+                out_prefix: path.basename(outputPath, path.extname(outputPath)),
+                page: null // Convert all pages
+            };
             
-            const results = await convert.bulk(-1);
+            const results = await pdf.convert(filePath, opts);
             return results;
         } catch (error) {
             throw new Error(`Failed to convert PDF: ${error.message}`);
